@@ -1,1 +1,1 @@
-web: shotgun api.rb -p $PORT
+web: bundle exec ruby api.rb -p $PORT
