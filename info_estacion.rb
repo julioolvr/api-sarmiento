@@ -35,13 +35,13 @@ class InfoEstacion
   end
 
   def siguientes_a_once
-    @data[0, 3].map(&:to_i).select do |minutos|
+    @data[3, 3].map(&:to_i).select do |minutos|
       minutos != -1
     end
   end
 
   def siguientes_a_moreno
-    @data[3, 3].map(&:to_i).select do |minutos|
+    @data[0, 3].map(&:to_i).select do |minutos|
       minutos != -1
     end
   end
