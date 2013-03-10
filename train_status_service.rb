@@ -1,13 +1,11 @@
-require 'net/http'
 require './info_estacion'
+require 'httparty'
 
 class TrainStatusService
   def initialize
-    uri = URI("http://trenes.mininterior.gov.ar/apps/web_/")
-    http = Net::HTTP.new(uri.host, uri.port)
-    result = http.get(uri.path)
-    @api_url = result.body.scan(/serverTrenesPath.*?"([^"]*)/).flatten.first + '1'
-    @key = result.to_hash['set-cookie'].first
+    app_page = HTTParty.get("http://trenes.mininterior.gov.ar/apps/web_/")
+    @api_url = app_page.body.scan(/serverTrenesPath.*?"([^"]*)/).flatten.first + '1'
+    @key = app_page.headers['set-cookie']
   end
 
   def self.get_status(estacion)
@@ -15,9 +13,7 @@ class TrainStatusService
   end
 
   def get_status(estacion)
-    uri = URI(@api_url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    result = http.get(@api_url, {'Cookie' => @key})
+    result = HTTParty.get @api_url, headers: {'Cookie' => @key}
     ret = InfoEstacion.process(result.body)
     estacion ? ret[estacion] : ret
   end
