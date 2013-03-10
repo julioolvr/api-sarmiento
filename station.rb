@@ -1,5 +1,5 @@
-class InfoEstacion
-  def self.estaciones
+class Station
+  def self.stations
     [
       'once',
       'caballito',
@@ -24,32 +24,32 @@ class InfoEstacion
     result = data.split('_')[2..-1]
     ret = {}
     result.each_slice(6).with_index do |slice, index|
-      ret[estaciones[index]] = self.new(estaciones[index], slice).to_hash
+      ret[stations[index]] = self.new(stations[index], slice).to_hash
     end
     ret
   end
 
-  def initialize(nombre, data)
-    @nombre = nombre
+  def initialize(name, data)
+    @name = name
     @data = data
   end
 
-  def siguientes_a_once
-    @data[3, 3].map(&:to_i).select do |minutos|
-      minutos != -1
+  def to_beginning
+    @data[3, 3].map(&:to_i).select do |minutes|
+      minutes != -1
     end
   end
 
-  def siguientes_a_moreno
-    @data[0, 3].map(&:to_i).select do |minutos|
-      minutos != -1
+  def to_end
+    @data[0, 3].map(&:to_i).select do |minutes|
+      minutes != -1
     end
   end
 
   def to_hash
     {
-      a_once: siguientes_a_once,
-      a_moreno: siguientes_a_moreno
+      a_once: to_beginning,
+      a_moreno: to_end
     }
   end
 end

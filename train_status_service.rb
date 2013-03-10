@@ -1,4 +1,4 @@
-require './info_estacion'
+require './station'
 require 'httparty'
 
 class TrainStatusService
@@ -8,13 +8,13 @@ class TrainStatusService
     @key = app_page.headers['set-cookie']
   end
 
-  def self.get_status(estacion)
-    self.new.get_status(estacion)
+  def self.get_status(station)
+    self.new.get_status(station)
   end
 
-  def get_status(estacion)
+  def get_status(station)
     result = HTTParty.get @api_url, headers: {'Cookie' => @key}
-    ret = InfoEstacion.process(result.body)
-    estacion ? ret[estacion] : ret
+    ret = Station.process(result.body)
+    station ? ret[station] : ret
   end
 end
