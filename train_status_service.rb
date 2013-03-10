@@ -8,13 +8,9 @@ class TrainStatusService
     @key = app_page.headers['set-cookie']
   end
 
-  def self.get_status(station)
-    self.new.get_status(station)
-  end
-
   def get_status(station)
     result = HTTParty.get @api_url, headers: {'Cookie' => @key}
-    ret = Station.process(result.body)
+    ret = Station.process(result.body).each_with_object({}) {|(k,v), h| h[k] = v.to_hash}
     station ? ret[station] : ret
   end
 end

@@ -20,36 +20,43 @@ class Station
     ]
   end
 
+  def self.beginning_station
+    'moreno'
+  end
+
+  def self.ending_station
+    'once'
+  end
+
   def self.process(data)
     result = data.split('_')[2..-1]
     ret = {}
     result.each_slice(6).with_index do |slice, index|
-      ret[stations[index]] = self.new(stations[index], slice).to_hash
+      ret[stations[index]] = self.new(slice)
     end
     ret
   end
 
-  def initialize(name, data)
-    @name = name
+  def initialize(data)
     @data = data
   end
 
   def to_beginning
-    @data[3, 3].map(&:to_i).select do |minutes|
+    @data[0, 3].map(&:to_i).select do |minutes|
       minutes != -1
     end
   end
 
   def to_end
-    @data[0, 3].map(&:to_i).select do |minutes|
+    @data[3, 3].map(&:to_i).select do |minutes|
       minutes != -1
     end
   end
 
   def to_hash
     {
-      a_once: to_beginning,
-      a_moreno: to_end
+      "a_#{self.class.beginning_station}" => to_beginning,
+      "a_#{self.class.ending_station}" => to_end
     }
   end
 end
