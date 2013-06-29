@@ -9,3 +9,7 @@ gem 'rack-test'
 gem 'autotest-standalone'
 gem 'webmock'
 gem 'simplecov'
+
+group :test do
+  gem 'rake'
+end
